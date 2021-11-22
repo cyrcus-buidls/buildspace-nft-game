@@ -17,6 +17,9 @@ import "./libraries/Base64.sol";
 // Our contract inherits from ERC721, which is the standard NFT contract!
 contract MyEpicGame is ERC721 {
 
+  event CharacterNFTMinted(address sender, uint256 tokenId, uint256 characterIndex);
+  event AttackComplete(uint newBossHp, uint newPlayerHp);
+
   struct CharacterAttributes {
     uint characterIndex;
     string name;
@@ -60,7 +63,7 @@ contract MyEpicGame is ERC721 {
     uint bossHp,
     uint bossAttackDamage
   )
-    ERC721("ETHFighers-001", "EF001")
+    ERC721("ETHFighters-001", "EF001")
   {
     // Initialize the boss. Save it to our global "bigBoss" state variable.
     bigBoss = BigBoss({
@@ -121,6 +124,8 @@ contract MyEpicGame is ERC721 {
 
     // Increment the tokenId for the next person that uses it.
     _tokenIds.increment();
+
+    emit CharacterNFTMinted(msg.sender, newItemId, _characterIndex);
   }
 
   function attackBoss() public {
@@ -159,6 +164,8 @@ contract MyEpicGame is ERC721 {
   // Console for ease.
   console.log("Player attacked boss. New boss hp: %s", bigBoss.hp);
   console.log("Boss attacked player. New player hp: %s\n", player.hp);
+
+  emit AttackComplete(bigBoss.hp, player.hp);
 }
 
   function tokenURI(uint256 _tokenId) public view override returns (string memory) {
@@ -190,6 +197,28 @@ contract MyEpicGame is ERC721 {
   );
   
   return output;
+}
+
+function checkIfUserHasNFT() public view returns (CharacterAttributes memory) {
+  // Get the tokenId of the user's character NFT
+  uint256 userNftTokenId = nftHolders[msg.sender];
+  // If the user has a tokenId in the map, return their character.
+  if (userNftTokenId > 0) {
+    return nftHolderAttributes[userNftTokenId];
+  }
+  // Else, return an empty character.
+  else {
+    CharacterAttributes memory emptyStruct;
+    return emptyStruct;
+   }
+}
+
+function getAllDefaultCharacters() public view returns (CharacterAttributes[] memory) {
+  return defaultCharacters;
+}
+
+function getBigBoss() public view returns (BigBoss memory) {
+  return bigBoss;
 }
 
 }

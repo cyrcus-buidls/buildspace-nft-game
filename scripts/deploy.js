@@ -6,29 +6,30 @@ const main = async () => {
     "https://i.imgur.com/LANuDHg.jpeg", 
     "https://i.imgur.com/QHROqrw.jpeg"],
     [400, 250, 150],                    // HP values
-    [50, 100, 200]                       // Attack damage values
+    [50, 100, 200],                       // Attack damage values
+    "Moloch of Course Boredom", // Boss name
+    "https://i.imgur.com/VtRuALl.png", // Boss image
+    10000, // Boss hp
+    50 // Boss attack damage
   );
   await gameContract.deployed();
   console.log("Contract deployed to:", gameContract.address);
 
-  let txn;
-  txn = await gameContract.mintCharacterNFT(0);
-  await txn.wait();
-  console.log("Minted NFT #1");
+  // let txn;
+  // // We only have three characters.
+  // // an NFT w/ the character at index 2 of our array.
+  // txn = await gameContract.mintCharacterNFT(1);
+  // await txn.wait();
 
-  txn = await gameContract.mintCharacterNFT(1);
-  await txn.wait();
-  console.log("Minted NFT #2");
+  // txn = await gameContract.attackBoss();
+  // await txn.wait();
 
-  txn = await gameContract.mintCharacterNFT(2);
-  await txn.wait();
-  console.log("Minted NFT #3");
+  // txn = await gameContract.attackBoss();
+  // await txn.wait();
 
-  txn = await gameContract.mintCharacterNFT(1);
-  await txn.wait();
-  console.log("Minted NFT #4");
-
-  console.log("Done deploying and minting!");
+  // Get the value of the NFT's URI.
+  // let returnedTokenUri = await gameContract.tokenURI(1);
+  // console.log("Token URI:", returnedTokenUri);
 };
 
 const runMain = async () => {
